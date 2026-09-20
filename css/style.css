@@ -229,10 +229,13 @@ h1, h2{ font-family: "Caveat", "Special Elite", cursive; font-weight: 700; }
   transition: opacity .15s ease;
 }
 .mem-card .face img{
+  /* contain (not cover) so the whole photo always shows, centered, no
+     matter what size or aspect ratio a customer's photo happens to be --
+     a fixed crop bias can never work for every possible photo. */
   width:100%;
   height:100%;
-  object-fit: cover;
-  object-position: 50% 30%;
+  object-fit: contain;
+  object-position: center;
   display:block;
 }
 .mem-card .face.face-fallback{
