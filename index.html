@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="theme-color" content="#8b5a2b" />
+<title>I Appreciate You ☕</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="hearts-bg" id="heartsBg" aria-hidden="true"></div>
+
+  <div class="app">
+
+    <!-- Progress dots (shown only during levels) -->
+    <div class="progress" id="progress" hidden>
+      <span class="progress-label" id="progressLabel">Level 1 of 4</span>
+      <div class="dots">
+        <span class="dot" data-dot="1"></span>
+        <span class="dot" data-dot="2"></span>
+        <span class="dot" data-dot="3"></span>
+        <span class="dot" data-dot="4"></span>
+      </div>
+    </div>
+
+    <!-- ===================== LANDING ===================== -->
+    <section class="screen" id="screen-landing">
+      <div class="card center-card">
+        <div class="big-emoji">☕</div>
+        <h1 class="title">Hey Ammu...</h1>
+        <p class="subtitle">There's something I want you to know. But first,<br>let's play a little ☕</p>
+        <button class="btn btn-primary" id="btnStart">Let's go ✨</button>
+        <p class="hint">4 tiny levels. No losing allowed. Promise.</p>
+      </div>
+    </section>
+
+    <!-- ===================== LEVEL 1: Catch the Little Things ===================== -->
+    <section class="screen" id="screen-level1" hidden>
+      <div class="card game-card">
+        <h2 class="game-title">Catch the Little Things ☕</h2>
+        <p class="game-sub">Tap the falling little things. Catch <b id="l1Goal">25</b> to continue.</p>
+        <div class="counter-row">
+          <span class="badge" id="l1Count">Caught: 0 / 25</span>
+          <span class="badge lock-badge">🔒 Next level locked</span>
+        </div>
+        <div class="game-stage" id="l1Stage"></div>
+      </div>
+    </section>
+
+    <!-- ===================== LEVEL 2: Match the Memories ===================== -->
+    <section class="screen" id="screen-level2" hidden>
+      <div class="card game-card">
+        <h2 class="game-title">Match the Memories 🤎</h2>
+        <p class="game-sub">Flip two cards at a time. Find all <b>6</b> pairs.</p>
+        <div class="counter-row">
+          <span class="badge" id="l2Count">Pairs: 0 / 6</span>
+          <span class="badge lock-badge">🔒 Next level locked</span>
+        </div>
+        <div class="memory-grid" id="l2Grid"></div>
+      </div>
+    </section>
+
+    <!-- ===================== LEVEL 3: Pop the balloons spelling THANKS ===================== -->
+    <section class="screen" id="screen-level3" hidden>
+      <div class="card game-card">
+        <h2 class="game-title">Pop It In Order 🎈</h2>
+        <p class="game-sub">Tap the balloons in order to spell it out.</p>
+        <div class="counter-row">
+          <span class="badge lock-badge">🔒 Next level locked</span>
+        </div>
+        <div class="word-target" id="l3Target"></div>
+        <div class="game-stage balloon-stage" id="l3Stage"></div>
+      </div>
+    </section>
+
+    <!-- ===================== LEVEL 4: One Last Thing ===================== -->
+    <section class="screen" id="screen-level4" hidden>
+      <div class="card game-card center-card">
+        <h2 class="game-title">One Last Thing 💛</h2>
+        <p class="game-sub" id="l4Question">Do you know how amazing you are?</p>
+        <div class="counter-row">
+          <span class="badge lock-badge">🔒 Surprise locked</span>
+        </div>
+        <div class="meter-stage" id="l4Stage">
+          <button class="btn btn-primary btn-grow" id="btnYes">Yes, I do 💛</button>
+          <button class="btn btn-runaway" id="btnNo">Hmm, not really</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FINAL REVEAL: coffee-stained letter ===================== -->
+    <section class="screen" id="screen-final" hidden>
+      <div class="card center-card final-card">
+        <div class="big-emoji">🎉</div>
+        <h1 class="title">You did it, Ammu 💛</h1>
+        <p class="subtitle">You played through all of it just for me.<br>Now, let me show you something I wrote...</p>
+
+        <div class="letter-wrap" id="letterWrap">
+          <button class="letter-crumpled" id="letterCrumpled" type="button" aria-label="Unfold the letter">
+            <span class="crease crease-1"></span>
+            <span class="crease crease-2"></span>
+            <span class="crease crease-3"></span>
+            <span class="crease crease-4"></span>
+            <span class="letter-crumpled-hint">👆 Tap to smooth it out</span>
+          </button>
+
+          <div class="letter-paper" id="letterPaper" hidden>
+            <span class="washi-tape"></span>
+            <span class="coffee-stain coffee-stain-1"></span>
+            <span class="coffee-stain coffee-stain-2"></span>
+            <div class="letter-text">
+              <p>My Ammu,</p>
+              <p>I don't say this enough, so I wanted to write it down where I can't take it back or rush past it.</p>
+              <p>Thank you — for the small things you do without ever making a big deal of them. For remembering what I forget. For showing up on the hard days and the boring ones too. For loving me in ways I probably don't even notice half the time.</p>
+              <p>I appreciate you. All of you. The version of you that laughs too loud, the version that worries too much, and every version in between.</p>
+              <p>I made you play through little things and memories and silly balloons just to get here — to this one true thing I wanted to say:</p>
+              <p>You are the best part of my everyday. Thank you for being you.</p>
+              <p class="letter-signature">Always,<br>Purush 💛</p>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn" id="btnReplay">Play again from the start</button>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+
+  <div class="unlock-overlay" id="unlockOverlay" hidden>
+    <div class="unlock-card">
+      <div class="lock-icon" id="lockIcon">🔒</div>
+      <h2 class="unlock-title" id="unlockTitle">Level Complete!</h2>
+      <p class="unlock-sub" id="unlockSub">Next level unlocked</p>
+      <button class="btn btn-primary" id="btnContinue">Continue →</button>
+    </div>
+  </div>
+
+  <footer class="site-footer">Made with 🤎 by Purush</footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
