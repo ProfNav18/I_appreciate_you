@@ -203,6 +203,25 @@
 
   btnContinue.addEventListener("click", advanceFromOverlay);
 
+  /* ---------------- Mistake overlay (Level 1 wrong tap) ---------------- */
+  const mistakeOverlay = el("mistakeOverlay");
+  const btnTryAgain = el("btnTryAgain");
+  let onTryAgain = null;
+
+  function showMistakeOverlay(retryFn) {
+    onTryAgain = retryFn;
+    mistakeOverlay.hidden = false;
+    requestAnimationFrame(() => mistakeOverlay.classList.add("show"));
+  }
+
+  btnTryAgain.addEventListener("click", () => {
+    mistakeOverlay.classList.remove("show");
+    setTimeout(() => {
+      mistakeOverlay.hidden = true;
+      if (onTryAgain) onTryAgain();
+    }, 250);
+  });
+
   /* ---------------- Floating background ambience ---------------- */
   function initHeartsBg() {
     const bg = el("heartsBg");
@@ -286,7 +305,8 @@
 
         if (!isTarget) {
           heart.classList.add("wrong-tap");
-          setTimeout(restart, 220);
+          clearInterval(level1Timer);
+          setTimeout(() => showMistakeOverlay(initLevel1), 220);
           return;
         }
 
