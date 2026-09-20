@@ -189,6 +189,14 @@ h1, h2{ font-family: "Caveat", "Special Elite", cursive; font-weight: 700; }
   from{ transform: translateY(0); }
   to{ transform: translateY(60vh); }
 }
+.falling-heart.wrong-tap{
+  animation: wrongTap .22s ease forwards;
+}
+@keyframes wrongTap{
+  0%{ filter: drop-shadow(0 6px 10px rgba(0,0,0,.12)); transform: scale(1); }
+  40%{ transform: scale(1.3); filter: drop-shadow(0 0 10px rgba(200,40,30,.8)); }
+  100%{ transform: scale(0.6); opacity: 0; filter: drop-shadow(0 0 10px rgba(200,40,30,.8)); }
+}
 .pop-burst{
   position:absolute;
   font-size: 26px;

@@ -229,16 +229,16 @@
     const stage = el("l1Stage");
     const countEl = el("l1Count");
     const goal = parseInt(el("l1Goal").textContent, 10);
-    stage.innerHTML = "";
-    let caught = 0;
-    countEl.textContent = `Caught: 0 / ${goal}`;
 
-    clearInterval(level1Timer);
-
-    const symbols = ["☕", "🤎", "💛", "🧡"];
+    const TARGET = "☕";
+    const DISTRACTORS = ["🍪", "🍩", "🧁"];
     const stageWidth = () => stage.clientWidth;
     const HEART_SIZE = 46;
-    const activeLefts = [];
+
+    let caught = 0;
+    let activeLefts = [];
+
+    clearInterval(level1Timer);
 
     function pickLeft() {
       const maxLeft = Math.max(stageWidth() - HEART_SIZE, 10);
@@ -251,11 +251,21 @@
       return left;
     }
 
+    function restart() {
+      caught = 0;
+      activeLefts = [];
+      countEl.textContent = `Caught: 0 / ${goal}`;
+      stage.innerHTML = "";
+    }
+
     function spawnHeart() {
       if (caught >= goal) return;
+      const isTarget = Math.random() < 0.55;
+      const symbol = isTarget ? TARGET : DISTRACTORS[Math.floor(Math.random() * DISTRACTORS.length)];
+
       const heart = document.createElement("div");
       heart.className = "falling-heart";
-      heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      heart.textContent = symbol;
       const left = pickLeft();
       activeLefts.push(left);
       heart.style.left = left + "px";
@@ -270,9 +280,16 @@
 
       heart.addEventListener("animationend", cleanup);
 
-      function catchHeart(e) {
+      function tapHeart(e) {
         e.preventDefault();
         if (caught >= goal) return;
+
+        if (!isTarget) {
+          heart.classList.add("wrong-tap");
+          setTimeout(restart, 220);
+          return;
+        }
+
         caught++;
         countEl.textContent = `Caught: ${caught} / ${goal}`;
 
@@ -296,10 +313,11 @@
         }
       }
 
-      heart.addEventListener("pointerdown", catchHeart, { once: true });
+      heart.addEventListener("pointerdown", tapHeart, { once: true });
       stage.appendChild(heart);
     }
 
+    restart();
     for (let i = 0; i < 4; i++) setTimeout(spawnHeart, i * 280);
     level1Timer = setInterval(spawnHeart, 650);
   }
