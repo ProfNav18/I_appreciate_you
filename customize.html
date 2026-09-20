@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="theme-color" content="#8b5a2b" />
+<title>Create Your Link ☕</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="app">
+    <section class="screen">
+      <div class="card">
+        <div class="big-emoji">☕</div>
+        <h1 class="title">Create Her Link</h1>
+        <p class="subtitle">Fill this in to personalize the game. You'll get a link to send her when you're done.</p>
+
+        <form id="customizeForm" class="customize-form">
+          <label>
+            Her name
+            <input type="text" name="partnerName" required placeholder="e.g. Ammu" />
+          </label>
+
+          <label>
+            Your name (signature)
+            <input type="text" name="signatureName" required placeholder="e.g. Purush" />
+          </label>
+
+          <label>
+            Letter — separate paragraphs with a blank line
+            <textarea name="letterText" required rows="9">My love,
+
+I don't say this enough, so I wanted to write it down where I can't take it back or rush past it.
+
+Thank you for the small things you do without ever making a big deal of them. For remembering what I forget. For showing up on the hard days and the boring ones too.
+
+I appreciate you. All of you.
+
+You are the best part of my everyday. Thank you for being you.</textarea>
+          </label>
+
+          <fieldset>
+            <legend>6 things you appreciate about them (Gratitude Wheel)</legend>
+            <input type="text" name="msg1" required placeholder="For always making time for me..." />
+            <input type="text" name="msg2" required placeholder="For remembering the little details..." />
+            <input type="text" name="msg3" required placeholder="For your patience..." />
+            <input type="text" name="msg4" required placeholder="For making ordinary moments special..." />
+            <input type="text" name="msg5" required placeholder="For loving me as I am..." />
+            <input type="text" name="msg6" required placeholder="For simply being you..." />
+          </fieldset>
+
+          <fieldset>
+            <legend>6 photos for Memory Match (optional — a photo left blank shows a placeholder instead)</legend>
+            <input type="file" name="photo1" accept="image/*" />
+            <input type="file" name="photo2" accept="image/*" />
+            <input type="file" name="photo3" accept="image/*" />
+            <input type="file" name="photo4" accept="image/*" />
+            <input type="file" name="photo5" accept="image/*" />
+            <input type="file" name="photo6" accept="image/*" />
+          </fieldset>
+
+          <button type="submit" class="btn btn-primary" id="submitBtn">Create my link ✨</button>
+        </form>
+
+        <div class="result-box" id="resultBox" hidden>
+          <p class="result-label">Her link is ready 🎉</p>
+          <div class="link-row">
+            <input type="text" id="resultLink" readonly />
+            <button class="btn" id="copyBtn" type="button">Copy</button>
+          </div>
+        </div>
+
+        <p class="error-box" id="errorBox" hidden></p>
+      </div>
+    </section>
+  </div>
+
+  <footer class="site-footer">Made with 🤎 by Purush</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="customize.js"></script>
+</body>
+</html>

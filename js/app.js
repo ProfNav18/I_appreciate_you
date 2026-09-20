@@ -4,6 +4,88 @@
   const SCREENS = ["landing", "level1", "level2", "level3", "level4", "final"];
   const STORAGE_KEY = "appreciate:progress";
 
+  const SUPABASE_URL = "https://kchtlgwxolnwoeegigqw.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_YJY5mp0N5d3ZFALc55gsNA_nmDWvCUg";
+  const supabaseClient =
+    window.supabase && window.supabase.createClient
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+  // Defaults match the original hardcoded personal version. A ?order=<id>
+  // link overrides these from Supabase; no param (or a failed fetch that
+  // falls back silently isn't acceptable here, so a bad id shows an error
+  // screen instead) means the page behaves exactly as it always has.
+  const CONFIG = {
+    partnerName: "Ammu",
+    signatureName: "Purush",
+    letterParagraphs: null,
+    gratitudeMessages: null,
+    photoUrls: null,
+  };
+
+  async function loadOrder() {
+    const orderId = new URLSearchParams(location.search).get("order");
+    if (!orderId) return true;
+    if (!supabaseClient) return true;
+
+    try {
+      const { data, error } = await supabaseClient
+        .from("orders")
+        .select("*")
+        .eq("id", orderId)
+        .single();
+
+      if (error || !data) {
+        showOrderNotFound();
+        return false;
+      }
+
+      CONFIG.partnerName = data.partner_name || CONFIG.partnerName;
+      CONFIG.signatureName = data.signature_name || CONFIG.signatureName;
+      CONFIG.letterParagraphs = Array.isArray(data.letter_paragraphs) && data.letter_paragraphs.length
+        ? data.letter_paragraphs
+        : null;
+      CONFIG.gratitudeMessages = Array.isArray(data.gratitude_messages) && data.gratitude_messages.length === 6
+        ? data.gratitude_messages
+        : null;
+      // length check only -- NOT "some truthy": a buyer who skips every
+      // photo still gets their own 6 placeholder cards, not a silent
+      // fallback to the site owner's personal hardcoded photos.
+      CONFIG.photoUrls = Array.isArray(data.photo_urls) && data.photo_urls.length === 6
+        ? data.photo_urls
+        : null;
+      return true;
+    } catch (e) {
+      showOrderNotFound();
+      return false;
+    }
+  }
+
+  function showOrderNotFound() {
+    const card = document.querySelector("#screen-landing .card");
+    card.innerHTML = `
+      <div class="big-emoji">🤔</div>
+      <h1 class="title">Hmm...</h1>
+      <p class="subtitle">We couldn't find this link. Double check it was copied correctly.</p>
+    `;
+  }
+
+  function applyConfig() {
+    [el("partnerName"), el("partnerNameFinal")].forEach((n) => {
+      if (n) n.textContent = CONFIG.partnerName;
+    });
+    [el("signatureName"), el("footerSignature")].forEach((n) => {
+      if (n) n.textContent = CONFIG.signatureName;
+    });
+
+    if (CONFIG.letterParagraphs) {
+      const container = document.querySelector("#letterPaper .letter-text");
+      container.innerHTML =
+        CONFIG.letterParagraphs.map((p) => `<p>${p}</p>`).join("") +
+        `<p class="letter-signature">Always,<br>${CONFIG.signatureName} 💛</p>`;
+    }
+  }
+
   const el = (id) => document.getElementById(id);
   const screens = {
     landing: el("screen-landing"),
@@ -229,7 +311,7 @@
   // hasn't been added yet at its path, the card falls back to a colored
   // placeholder + camera icon so the grid still looks intentional and the
   // game stays fully playable while you're adding the real pictures.
-  const MEMORY_PHOTOS = [
+  const DEFAULT_MEMORY_PHOTOS = [
     "assets/couple/1.jpg",
     "assets/couple/2.jpg",
     "assets/couple/3.jpg",
@@ -244,10 +326,11 @@
     const countEl = el("l2Count");
     grid.innerHTML = "";
 
-    const fallbackColorFor = new Map(
-      MEMORY_PHOTOS.map((photo, i) => [photo, MEMORY_FALLBACK_COLORS[i % MEMORY_FALLBACK_COLORS.length]])
-    );
-    const deck = [...MEMORY_PHOTOS, ...MEMORY_PHOTOS]
+    const memoryPhotos = CONFIG.photoUrls || DEFAULT_MEMORY_PHOTOS;
+    // Pairs are keyed by index, not by URL: a buyer can skip several photos
+    // (leaving multiple null entries), and those must still count as
+    // distinct pairs rather than all matching each other as "null".
+    const deck = [...memoryPhotos.keys(), ...memoryPhotos.keys()]
       .map((v) => ({ v, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map((x) => x.v);
@@ -257,22 +340,30 @@
     let lock = false;
     countEl.textContent = "Pairs: 0 / 6";
 
-    deck.forEach((photo) => {
+    deck.forEach((index) => {
+      const photo = memoryPhotos[index];
       const card = document.createElement("div");
       card.className = "mem-card";
-      card.dataset.icon = photo;
+      card.dataset.icon = String(index);
 
       const face = document.createElement("span");
       face.className = "face";
-      const img = document.createElement("img");
-      img.src = photo;
-      img.alt = "";
-      img.onerror = () => {
+
+      function showFallback() {
         face.innerHTML = "📷";
         face.classList.add("face-fallback");
-        face.style.background = fallbackColorFor.get(photo);
-      };
-      face.appendChild(img);
+        face.style.background = MEMORY_FALLBACK_COLORS[index % MEMORY_FALLBACK_COLORS.length];
+      }
+
+      if (photo) {
+        const img = document.createElement("img");
+        img.src = photo;
+        img.alt = "";
+        img.onerror = showFallback;
+        face.appendChild(img);
+      } else {
+        showFallback();
+      }
       card.appendChild(face);
 
       card.addEventListener("click", () => {
@@ -327,7 +418,7 @@
     const messageBox = el("l3Message");
     const countEl = el("l3Count");
 
-    const messages = [
+    const messages = CONFIG.gratitudeMessages || [
       "For always making time for me, even when you're busy.",
       "For the way you remember the little details.",
       "For your patience on my worst days.",
@@ -503,6 +594,11 @@
   });
 
   /* ---------------- Boot ---------------- */
-  initHeartsBg();
-  goTo(SCREENS[getFurthestUnlocked()]);
+  (async () => {
+    initHeartsBg();
+    const ok = await loadOrder();
+    if (!ok) return;
+    applyConfig();
+    goTo(SCREENS[getFurthestUnlocked()]);
+  })();
 })();

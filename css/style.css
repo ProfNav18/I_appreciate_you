@@ -545,3 +545,75 @@ h1, h2{ font-family: "Caveat", "Special Elite", cursive; font-weight: 700; }
   .memory-grid{ gap: 8px; }
   .card{ padding: 20px 16px; }
 }
+
+/* Customizer form */
+.customize-form{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  text-align:left;
+  margin-top: 10px;
+}
+.customize-form label{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-weight:600;
+  font-size:14px;
+  color: var(--coffee-dark);
+}
+.customize-form input[type="text"],
+.customize-form textarea{
+  font-family: inherit;
+  font-size:14px;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid rgba(139,90,43,.3);
+  background:#fffaf0;
+  color: var(--ink);
+}
+.customize-form textarea{ resize: vertical; line-height:1.5; }
+.customize-form fieldset{
+  border:1px solid rgba(139,90,43,.25);
+  border-radius:12px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin:0;
+}
+.customize-form legend{
+  font-weight:700;
+  font-size:13px;
+  color: var(--coffee-deep);
+  padding:0 6px;
+}
+.customize-form input[type="file"]{
+  font-size:13px;
+  font-family: inherit;
+}
+
+.result-box{
+  margin-top:18px;
+  padding:16px;
+  background:#fffaf0;
+  border-radius:14px;
+  border:1px solid rgba(139,90,43,.25);
+}
+.result-box[hidden]{ display:none; }
+.result-label{ font-weight:700; margin:0 0 8px; color: var(--coffee-deep); }
+.link-row{ display:flex; gap:8px; }
+.link-row input{
+  flex:1;
+  font-size:13px;
+  padding:8px 10px;
+  border-radius:8px;
+  border:1px solid rgba(139,90,43,.3);
+  font-family: inherit;
+}
+.error-box{
+  margin-top:14px;
+  color:#a33;
+  font-size:13px;
+  font-weight:600;
+}

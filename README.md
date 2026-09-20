@@ -7,12 +7,21 @@ unfolds on tap — fully self-contained, no video hosting or external accounts n
 
 ## Personalize it
 
+**For your own link** (no code changes):
 - **Letter**: edit the text directly in `index.html` inside `#letterPaper .letter-text` —
   it's plain HTML paragraphs. The signature line and footer both say "Purush"; update
   those too.
 - **Couple photos**: add 6 photos at `assets/couple/1.jpg` through `assets/couple/6.jpg`
   (see `assets/couple/README.md`) for the Memory Match level. Until they're added, that
   level shows colored placeholder cards instead of broken images.
+
+**For selling to other couples**: open `customize.html` — a form where a buyer fills in
+their partner's name, letter, 6 gratitude-wheel messages, and 6 photos, and gets back a
+unique link (`?order=<id>`). That link loads their own personalization from Supabase
+instead of the hardcoded content above; a plain link with no `?order=` still shows the
+original hardcoded version untouched. Backend: a Supabase project (`orders` table +
+`couple-photos` storage bucket) — see the project's SQL Editor history or ask the person
+who set this up for the schema.
 
 ## Run locally
 
