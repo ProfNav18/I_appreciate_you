@@ -291,79 +291,86 @@
   }
 
   /* ==================================================================
-     LEVEL 3 — Pop balloons spelling THANKS
+     LEVEL 3 — Gratitude Wheel
   ================================================================== */
   function initLevel3() {
-    const target = el("l3Target");
-    const stage = el("l3Stage");
-    target.innerHTML = "";
-    stage.innerHTML = "";
+    const wheel = el("l3Wheel");
+    const spinBtn = el("l3SpinBtn");
+    const messageBox = el("l3Message");
+    const countEl = el("l3Count");
 
-    const word = ["T", "H", "A", "N", "K", "S"];
+    const messages = [
+      "For always making time for me, even when you're busy.",
+      "For the way you remember the little details.",
+      "For your patience on my worst days.",
+      "For making ordinary moments feel special.",
+      "For loving me exactly as I am.",
+      "For simply being you.",
+    ];
+    const icons = ["☕", "🤎", "💛", "🧡", "✨", "🍪"];
     const colors = ["#b9531f", "#8b5a2b", "#c99b62", "#d9a441", "#a97b45", "#c1502e"];
-    let progressIndex = 0;
+    const segmentDeg = 360 / messages.length;
 
-    word.forEach((letter, i) => {
-      const slot = document.createElement("div");
-      slot.className = "word-slot";
-      slot.dataset.index = i;
-      target.appendChild(slot);
+    wheel.style.background =
+      "conic-gradient(from 0deg, " +
+      colors.map((c, i) => `${c} ${i * segmentDeg}deg ${(i + 1) * segmentDeg}deg`).join(", ") +
+      ")";
+
+    wheel.innerHTML = "";
+    icons.forEach((icon, i) => {
+      const label = document.createElement("span");
+      label.className = "wheel-label";
+      label.textContent = icon;
+      const angle = i * segmentDeg + segmentDeg / 2;
+      label.style.transform = `translate(-50%,-50%) rotate(${angle}deg) translateY(-88px) rotate(${-angle}deg)`;
+      wheel.appendChild(label);
     });
 
-    const shuffled = word
-      .map((v) => ({ v, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map((x) => x.v);
+    messageBox.hidden = true;
+    messageBox.textContent = "";
+    spinBtn.disabled = false;
+    countEl.textContent = `Revealed: 0 / ${messages.length}`;
 
-    const stageWidth = () => stage.clientWidth;
-    const stageHeight = () => stage.clientHeight;
-    const positions = [];
-    const cols = 5;
-    shuffled.forEach((letter, i) => {
-      const col = i % cols;
-      const cellWidth = (stageWidth() || 300) / cols;
-      const left = col * cellWidth + cellWidth / 2 - 29 + (Math.random() * 16 - 8);
-      const top = 20 + Math.random() * Math.max((stageHeight() || 300) - 120, 60);
-      positions.push({ left, top });
-    });
+    // A shuffled "bag" of segment indices — pops one per spin so every
+    // message is guaranteed to appear exactly once, no frustrating repeats,
+    // and the level always finishes in exactly 6 spins.
+    const bag = messages
+      .map((_, i) => i)
+      .sort(() => Math.random() - 0.5);
+    let revealed = 0;
+    let currentRotation = 0;
 
-    shuffled.forEach((letter, i) => {
-      const balloon = document.createElement("div");
-      balloon.className = "balloon";
-      balloon.textContent = letter;
-      balloon.dataset.letter = letter;
-      balloon.style.background = colors[i % colors.length];
-      balloon.style.left = Math.max(positions[i].left, 6) + "px";
-      balloon.style.top = positions[i].top + "px";
-      balloon.style.animationDelay = (Math.random() * 2).toFixed(2) + "s";
+    spinBtn.onclick = () => {
+      if (bag.length === 0) return;
+      spinBtn.disabled = true;
+      messageBox.hidden = true;
 
-      balloon.addEventListener("pointerdown", (e) => {
-        e.preventDefault();
-        if (balloon.classList.contains("popped")) return;
-        const needed = word[progressIndex];
+      const targetIndex = bag.pop();
+      const targetCenter = targetIndex * segmentDeg + segmentDeg / 2;
+      // Rotate clockwise so the wheel's targetCenter angle ends up under the
+      // fixed top pointer (0deg), plus a few extra full spins for effect.
+      const finalMod = (360 - targetCenter + 360) % 360;
+      const delta = (finalMod - (currentRotation % 360) + 360) % 360;
+      currentRotation += 360 * 5 + delta;
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-        if (letter === needed) {
-          balloon.classList.add("popped");
-          const slot = target.querySelector(`[data-index="${progressIndex}"]`);
-          slot.textContent = letter;
-          slot.classList.add("filled");
-          progressIndex++;
+      setTimeout(() => {
+        revealed++;
+        messageBox.textContent = messages[targetIndex];
+        messageBox.hidden = false;
+        countEl.textContent = `Revealed: ${revealed} / ${messages.length}`;
 
-          if (progressIndex === word.length) {
-            showUnlockOverlay(
-              "level4",
-              "Level 3 Complete! 🎈",
-              "You make ordinary days feel worth writing about."
-            );
-          }
+        if (bag.length === 0) {
+          showUnlockOverlay(
+            "level4",
+            "Level 3 Complete! ☕",
+            "You make ordinary days feel worth writing about."
+          );
         } else {
-          balloon.classList.add("wiggle");
-          setTimeout(() => balloon.classList.remove("wiggle"), 300);
+          spinBtn.disabled = false;
         }
-      });
-
-      stage.appendChild(balloon);
-    });
+      }, 3300);
+    };
   }
 
   /* ==================================================================

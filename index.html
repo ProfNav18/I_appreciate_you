@@ -65,16 +65,23 @@
       </div>
     </section>
 
-    <!-- ===================== LEVEL 3: Pop the balloons spelling THANKS ===================== -->
+    <!-- ===================== LEVEL 3: Gratitude Wheel ===================== -->
     <section class="screen" id="screen-level3" hidden>
       <div class="card game-card">
-        <h2 class="game-title">Pop It In Order 🎈</h2>
-        <p class="game-sub">Tap the balloons in order to spell it out.</p>
+        <h2 class="game-title">Gratitude Wheel ☕</h2>
+        <p class="game-sub">Spin to reveal all 6 things I appreciate about you.</p>
         <div class="counter-row">
+          <span class="badge" id="l3Count">Revealed: 0 / 6</span>
           <span class="badge lock-badge">🔒 Next level locked</span>
         </div>
-        <div class="word-target" id="l3Target"></div>
-        <div class="game-stage balloon-stage" id="l3Stage"></div>
+
+        <div class="wheel-area">
+          <div class="wheel-pointer">▼</div>
+          <div class="wheel" id="l3Wheel"></div>
+          <button class="wheel-hub" id="l3SpinBtn" type="button">Spin</button>
+        </div>
+
+        <div class="wheel-message" id="l3Message" hidden></div>
       </div>
     </section>
 

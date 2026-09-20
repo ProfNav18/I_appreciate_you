@@ -1,9 +1,9 @@
 # I Appreciate You ☕
 
 A cute, gamified mobile-first appreciation page with an 80s coffee-note theme. She plays
-through 4 short, un-loseable mini games (catch the little things, match the memories, pop
-the balloons, one last thing) and then unlocks a final coffee-stained letter that unfolds
-on tap — fully self-contained, no video hosting or external accounts needed.
+through 4 short, un-loseable mini games (catch the little things, match the memories, spin
+the gratitude wheel, one last thing) and then unlocks a final coffee-stained letter that
+unfolds on tap — fully self-contained, no video hosting or external accounts needed.
 
 ## Personalize it
 
