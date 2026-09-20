@@ -225,13 +225,29 @@
   /* ==================================================================
      LEVEL 2 — Match the Memories
   ================================================================== */
+  // Six couple photos, each appearing twice as a matching pair. If a photo
+  // hasn't been added yet at its path, the card falls back to a colored
+  // placeholder + camera icon so the grid still looks intentional and the
+  // game stays fully playable while you're adding the real pictures.
+  const MEMORY_PHOTOS = [
+    "assets/couple/1.jpg",
+    "assets/couple/2.jpg",
+    "assets/couple/3.jpg",
+    "assets/couple/4.jpg",
+    "assets/couple/5.jpg",
+    "assets/couple/6.jpg",
+  ];
+  const MEMORY_FALLBACK_COLORS = ["#b9531f", "#8b5a2b", "#c99b62", "#d9a441", "#a97b45", "#c1502e"];
+
   function initLevel2() {
     const grid = el("l2Grid");
     const countEl = el("l2Count");
     grid.innerHTML = "";
 
-    const icons = ["☕", "🤎", "💛", "🧡", "🍪", "✨"];
-    const deck = [...icons, ...icons]
+    const fallbackColorFor = new Map(
+      MEMORY_PHOTOS.map((photo, i) => [photo, MEMORY_FALLBACK_COLORS[i % MEMORY_FALLBACK_COLORS.length]])
+    );
+    const deck = [...MEMORY_PHOTOS, ...MEMORY_PHOTOS]
       .map((v) => ({ v, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map((x) => x.v);
@@ -241,11 +257,23 @@
     let lock = false;
     countEl.textContent = "Pairs: 0 / 6";
 
-    deck.forEach((icon) => {
+    deck.forEach((photo) => {
       const card = document.createElement("div");
       card.className = "mem-card";
-      card.innerHTML = `<span class="face">${icon}</span>`;
-      card.dataset.icon = icon;
+      card.dataset.icon = photo;
+
+      const face = document.createElement("span");
+      face.className = "face";
+      const img = document.createElement("img");
+      img.src = photo;
+      img.alt = "";
+      img.onerror = () => {
+        face.innerHTML = "📷";
+        face.classList.add("face-fallback");
+        face.style.background = fallbackColorFor.get(photo);
+      };
+      face.appendChild(img);
+      card.appendChild(face);
 
       card.addEventListener("click", () => {
         if (lock) return;
