@@ -1,8 +1,8 @@
 (() => {
   "use strict";
 
-  const SUPABASE_URL = "https://kchtlgwxolnwoeegigqw.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_YJY5mp0N5d3ZFALc55gsNA_nmDWvCUg";
+  const SUPABASE_URL = "https://cqqzsagjrgajnvyarxth.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_iFPxkxE2uKqMRm1L2Edwcw_addc_teh";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const form = document.getElementById("customizeForm");
