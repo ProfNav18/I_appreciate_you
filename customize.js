@@ -17,6 +17,31 @@
     errorBox.hidden = false;
   }
 
+  for (let i = 1; i <= 6; i++) {
+    const input = document.getElementById(`photo${i}`);
+    const label = input.closest(".photo-upload");
+    const icon = label.querySelector(".photo-upload-icon");
+    const text = label.querySelector(".photo-upload-text");
+
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+      label.querySelector(".photo-upload-preview")?.remove();
+      if (!file) {
+        label.classList.remove("has-photo");
+        icon.hidden = false;
+        text.textContent = `Photo ${i}`;
+        return;
+      }
+      label.classList.add("has-photo");
+      icon.hidden = true;
+      text.textContent = file.name;
+      const img = document.createElement("img");
+      img.className = "photo-upload-preview";
+      img.src = URL.createObjectURL(file);
+      label.insertBefore(img, icon);
+    });
+  }
+
   async function uploadPhoto(orderId, index, file) {
     if (!file || !file.size) return null;
     const ext = (file.name.split(".").pop() || "jpg").toLowerCase();

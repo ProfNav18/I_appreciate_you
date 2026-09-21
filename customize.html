@@ -56,12 +56,38 @@ You are the best part of my everyday. Thank you for being you.</textarea>
 
           <fieldset>
             <legend>6 photos for Memory Match (optional — a photo left blank shows a placeholder instead)</legend>
-            <input type="file" name="photo1" accept="image/*" />
-            <input type="file" name="photo2" accept="image/*" />
-            <input type="file" name="photo3" accept="image/*" />
-            <input type="file" name="photo4" accept="image/*" />
-            <input type="file" name="photo5" accept="image/*" />
-            <input type="file" name="photo6" accept="image/*" />
+            <div class="photo-grid">
+              <label class="photo-upload" for="photo1">
+                <input type="file" id="photo1" name="photo1" accept="image/*" />
+                <span class="photo-upload-icon">📷</span>
+                <span class="photo-upload-text">Photo 1</span>
+              </label>
+              <label class="photo-upload" for="photo2">
+                <input type="file" id="photo2" name="photo2" accept="image/*" />
+                <span class="photo-upload-icon">📷</span>
+                <span class="photo-upload-text">Photo 2</span>
+              </label>
+              <label class="photo-upload" for="photo3">
+                <input type="file" id="photo3" name="photo3" accept="image/*" />
+                <span class="photo-upload-icon">📷</span>
+                <span class="photo-upload-text">Photo 3</span>
+              </label>
+              <label class="photo-upload" for="photo4">
+                <input type="file" id="photo4" name="photo4" accept="image/*" />
+                <span class="photo-upload-icon">📷</span>
+                <span class="photo-upload-text">Photo 4</span>
+              </label>
+              <label class="photo-upload" for="photo5">
+                <input type="file" id="photo5" name="photo5" accept="image/*" />
+                <span class="photo-upload-icon">📷</span>
+                <span class="photo-upload-text">Photo 5</span>
+              </label>
+              <label class="photo-upload" for="photo6">
+                <input type="file" id="photo6" name="photo6" accept="image/*" />
+                <span class="photo-upload-icon">📷</span>
+                <span class="photo-upload-text">Photo 6</span>
+              </label>
+            </div>
           </fieldset>
 
           <button type="submit" class="btn btn-primary" id="submitBtn">Create my link ✨</button>
